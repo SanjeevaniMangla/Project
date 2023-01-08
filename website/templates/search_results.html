@@ -1,0 +1,15 @@
+{%extends "base.html"%} {% block title %}Search{% endblock %}
+
+{%block content%}
+<h1>Search Results</h1>
+
+<ul>
+  {% for user in user %}
+    <li>
+      <h2><a href="/user/{{ user.id }}">{{ user.first_name }}</a></h2>
+    </li>
+  {% endfor %}
+</ul>
+
+{%endblock%}
+

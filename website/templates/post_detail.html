@@ -1,0 +1,54 @@
+{%extends "base.html"%} {% block title %}Post{% endblock %}
+
+{%block content%}
+
+<div class="container" style="max-width: 93.5rem; margin: 0 auto; padding: 0 2rem; ">
+
+    {%set p=post %}
+
+    <div class="card mb-3 align-middle" style=' margin-top: 80px; width: 500px; margin-right: auto; margin-left: auto;'>
+        <div class="card-header">
+            <p>By: <strong><a href="{{url_for('views.profile', username=p.author.first_name)}}">{{p.author.first_name}}</a></strong></p>
+        </div>
+
+        <img src="{{ p.img }}" class="card-img-top" alt="..." style="width: 500px;">
+        <div class="card-body">
+            {% if current_user.id!=p.user_id %}
+
+            {% if current_user.post_liked(p) %}
+            <!-- <a href="#" class='dislikes' id={{p.id}}>Dislike</a> -->
+            <a href="/dislike/{{ p.id }}">Dislike</a>
+
+            {%else%}
+            <!-- <a href="#" class='likes' id={{p.id}}>Like</a> -->
+            <a href="/like/{{ p.id }}">Like</a>
+            {%endif%}
+
+            {%endif%}
+
+            {%if current_user.first_name == p.author.first_name%}
+            <a href="{{url_for('views.delete_post', id=p.id)}}" >Delete</a>
+            {%endif%}
+
+            <p id="count_{{p.id}}"><b>{{ p.likes.count() }} liked this post</b></p>
+
+            <p class="card-text"><small class="text-muted">Posted: {{p.timestamp}}</small></p>
+
+        </div>
+        
+        <table>
+
+            <form>
+                <input type="hidden" id='first_name' value="{{current_user.first_name}}">
+                <tr><input class="form-control comment" placeholder="Add a comment" style="width: 65.2em; height: 4em"></tr>
+                <tr><input type="button" tabindex="-1" value="Post" /></tr>
+            </form>
+        </table>
+    
+    </div>
+
+
+</div>
+
+
+{%endblock%}

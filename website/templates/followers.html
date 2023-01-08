@@ -1,0 +1,13 @@
+{% extends "base.html" %} {% block title %}Followers{% endblock %}
+
+{% block content %}
+
+<h2><b>Hi  {{current_user.first_name}}!!</b></h2>
+<h3 >Here is a list of your followers -</h3>
+
+{% for follower in followers %}
+<h3><li>{{ follower.first_name }}</li></h3>
+{% endfor %}
+{% endblock %}
+
+<!-- style ="font-family: WindSong"; -->

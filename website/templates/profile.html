@@ -1,0 +1,109 @@
+{% extends "base.html" %} {% block title %}Profile{% endblock %}
+
+{% block content %}
+
+<header style="	font-size: 10px;">
+
+    <div class="container" style="max-width: 93.5rem;
+    margin: 0 auto;
+    padding: 0 2rem;">
+
+        <div class="profile" style=" padding: 5rem 0;">
+            <div class="profile-user-settings" style="margin-top: 1.1rem;">
+                <h1 class="profile-user-name" style="display: inline-block; font-size: 3rem; font-weight: 300;"><b>{{user.first_name}}</b></h1>
+
+                {%if current_user.is_following(user) and user.first_name != current_user.first_name %}
+                <button class="btn profile-edit-btn" style="font-weight: 600; font-size: 1.4rem;line-height: 1.8;border: 0.1rem solid #dbdbdb;border-radius: 0.3rem;padding: 0 2.4rem;margin-left: 2rem;">
+                    <a href="{{url_for('views.unfollow', first_name=user.first_name)}}" class='unfollow'>Unfollow</a>
+                </button>
+
+                {%elif user.first_name != current_user.first_name %}
+                <button class="btn profile-edit-btn" style="font-weight: 600; font-size: 1.4rem;line-height: 1.8;border: 0.1rem solid #dbdbdb;border-radius: 0.3rem;padding: 0 2.4rem;margin-left: 2rem;">
+                    <a href="{{url_for('views.follow', first_name=user.first_name)}}" class='follow'>Follow</a>
+                </button>
+
+                {%else%}
+                <button class="btn profile-edit-btn" data-toggle="modal" data-target="#exampleModal" style="font-weight: 600; font-size: 1.4rem;line-height: 1.8;border: 0.1rem solid #dbdbdb;border-radius: 0.3rem;padding: 0 2.4rem;margin-left: 2rem;">New Post</button>
+                {%endif%}
+            </div>
+
+            <div class="profile-stats" style="margin-top: 2.3rem;">
+
+                <ul>
+                    <li style="display: inline-block;font-size: 1.6rem;line-height: 1.5;margin-right: 4rem;cursor:pointer;color: black;">
+                        <span class="profile-stat-count" style="font-weight: 600;">{{user.posts.count()}}</span> posts
+                    </li>
+                    <li style="display: inline-block;font-size: 1.6rem;line-height: 1.5;margin-right: 4rem;cursor:pointer;">
+                        <a href="{{ url_for('views.followers', username=user.first_name) }}", style="color: black;">
+                            <span class="profile-stat-count" style="font-weight: 600;"
+                            id='followers_count'>{{user.followers.count()}}
+                            </span> followers
+                        </a>
+                    </li>
+                    <li style="margin-right: 0;display: inline-block;font-size: 1.6rem;line-height: 1.5;margin-right: 4rem;cursor:pointer;">
+                        <a href="{{ url_for('views.following', username=user.first_name) }}", style="color: black;">
+                            <span class="profile-stat-count" style="font-weight: 600;">{{user.followed.count()}}
+                            </span> following
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+        <!-- End of profile section -->
+
+    </div>
+    <!-- End of container -->
+
+</header>
+
+<main>
+
+    <div class="container" style="max-width: 93.5rem; margin: 0 auto; padding: 0 2rem; position: absolute;">
+        <div class="row">
+            {% for p in posts%}
+            <div class="gallery-item col-lg-3 col-md-9 col-sm-12" style="margin-left: 1.5em; margin-bottom: 1.5em;flex: 1 0 22rem;margin: 1rem;color: #fff;cursor: pointer;">
+                <a href="{{url_for('views.post_detail', id=p.id) }}">
+                
+                    <img src="{{ p.img }}" class="card-img-top" alt="...">
+                    <!-- <img src="{{ url_for('static', filename=p.img) }}" class="card-img-top" alt="..."> -->
+                </a>
+
+            </div>
+            {% endfor%}
+        </div>
+    </div>
+</main>
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add a new post</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/upload_post" method="POST" enctype="multipart/form-data">
+                    <input type="file" name="image_file">
+                    <input type="submit" value="Upload">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+<!-- <div class="center">
+    <form action="/upload_post" method="POST" enctype="multipart/form-data">
+        <input type="file" name="image_file">
+        <input type="submit" value="Upload">
+    </form>
+    <br> <br>
+    {% for post in posts %}
+    <img src="{{ post.img }}" alt="Post image">
+    {% endfor %}
+
+</div>  -->
